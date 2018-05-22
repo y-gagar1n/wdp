@@ -38,14 +38,14 @@ exports.__esModule = true;
 var node_fetch_1 = require("node-fetch");
 function getArticles(type) {
     return __awaiter(this, void 0, void 0, function () {
-        var newsAPI, techAPI, req, _a, data;
+        var vergeAPI, techAPI, req, _a, data;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    newsAPI = "https://newsapi.org/v1/articles?source=al-jazeera-english&sortBy=top&apiKey=ee582714b32645c8a48b8601e7267063";
-                    techAPI = "https://newsapi.org/v1/articles?source=the-next-web&sortBy=latest&apiKey=ee582714b32645c8a48b8601e7267063";
-                    if (!(type === 'news')) return [3 /*break*/, 2];
-                    return [4 /*yield*/, node_fetch_1["default"](newsAPI)];
+                    vergeAPI = "https://newsapi.org/v2/everything?sources=the-verge&sortBy=publishedAt&apiKey=ee582714b32645c8a48b8601e7267063";
+                    techAPI = "https://newsapi.org/v2/everything?sources=the-next-web&sortBy=publishedAt&apiKey=ee582714b32645c8a48b8601e7267063";
+                    if (!(type === 'verge')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, node_fetch_1["default"](vergeAPI)];
                 case 1:
                     _a = _b.sent();
                     return [3 /*break*/, 4];
@@ -72,37 +72,54 @@ function getArticles(type) {
 var NewsService = (function () {
     function NewsService() {
     }
-    NewsService.prototype.tech = function () {
+    NewsService.prototype.thenextweb = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, getArticles('tech')];
+                return [2 /*return*/, getArticles('thenextweb')];
             });
         });
     };
-    NewsService.prototype.news = function () {
+    NewsService.prototype.verge = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, getArticles('news')];
+                return [2 /*return*/, getArticles('verge')];
             });
         });
     };
     NewsService.prototype.hackerNews = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var hnAPI, data;
+            var _this = this;
+            var hhListAPI, hhItemAPIprefix, hhItemAPIpostfix, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        hnAPI = "https://hn.algolia.com/api/v1/search_by_date?tags=story&numericFilters=points%3E100";
-                        return [4 /*yield*/, node_fetch_1["default"](hnAPI)];
+                        hhListAPI = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
+                        hhItemAPIprefix = "https://hacker-news.firebaseio.com/v0/item/";
+                        hhItemAPIpostfix = ".json?print=pretty";
+                        return [4 /*yield*/, node_fetch_1["default"](hhListAPI)];
                     case 1: return [4 /*yield*/, (_a.sent()).json()];
                     case 2:
                         data = _a.sent();
-                        return [2 /*return*/, data.hits.map(function (article) { return ({
-                                title: "(" + article.points + " | " + article.num_comments + ") " + article.title,
-                                description: "",
-                                author: article.author,
-                                url: article.url ? article.url : "https://news.ycombinator.com/item?id=" + article.objectID
-                            }); })];
+                        return [4 /*yield*/, Promise.all(data.slice(0, 20).map(function (id) { return __awaiter(_this, void 0, void 0, function () {
+                                var itemUrl, item;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            itemUrl = hhItemAPIprefix + id + hhItemAPIpostfix;
+                                            return [4 /*yield*/, node_fetch_1["default"](itemUrl)];
+                                        case 1: return [4 /*yield*/, (_a.sent()).json()];
+                                        case 2:
+                                            item = _a.sent();
+                                            return [2 /*return*/, {
+                                                    title: item.title,
+                                                    description: item.title,
+                                                    author: item.by,
+                                                    url: item.url
+                                                }];
+                                    }
+                                });
+                            }); }))];
+                    case 3: return [2 /*return*/, _a.sent()];
                 }
             });
         });
@@ -113,7 +130,7 @@ var NewsService = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        redditAPI = "https://www.reddit.com/user/tehRash/m/work.json";
+                        redditAPI = "https://www.reddit.com/user/gagar1n/m/1_programming.json";
                         return [4 /*yield*/, node_fetch_1["default"](redditAPI)];
                     case 1: return [4 /*yield*/, (_a.sent()).json()];
                     case 2:
@@ -124,26 +141,6 @@ var NewsService = (function () {
                                 author: article.data.author,
                                 description: ""
                             }); })];
-                }
-            });
-        });
-    };
-    NewsService.prototype.crypto = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var ccAPI, res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        ccAPI = "https://min-api.cryptocompare.com/data/histoday?fsym=NXT&tsym=USD&limit=60&aggregate=3&e=CCCAGG";
-                        return [4 /*yield*/, node_fetch_1["default"](ccAPI)];
-                    case 1: return [4 /*yield*/, (_a.sent()).json()];
-                    case 2:
-                        res = _a.sent();
-                        return [2 /*return*/, {
-                                title: 'NXT',
-                                x: res.Data.map(function (cc) { return new Date(cc.time * 1000).toDateString().substr(0, 10); }),
-                                y: res.Data.map(function (cc) { return cc.close; })
-                            }];
                 }
             });
         });

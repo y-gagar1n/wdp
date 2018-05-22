@@ -5,8 +5,8 @@ export const newsBox = blessed.box({
   top: '50%',
   left: '0',
   width: '50%',
-  height: '25%',
-  label: 'News',
+  height: '50%',
+  label: 'The Verge',
   scrollable: true,
   border: {
     type: 'line'

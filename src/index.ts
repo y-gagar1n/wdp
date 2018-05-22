@@ -1,7 +1,6 @@
 declare var Promise;
 import * as blessed from 'blessed';
 let screen = blessed.screen({smartCSR: true});
-screen.title = `Waddup!?`;
 import * as contrib from 'blessed-contrib';
 import * as opn from 'opn';
 import { NewsArticle, NewsService } from './services/news.service';
@@ -9,18 +8,16 @@ import {
   redditBox,
   hnBox,
   newsBox,
-  techBox,
-  cryptoGraph
+  techBox
 } from './boxes/';
-let crypto;
 
 
 const ns = new NewsService();
 const boxes = [
   { name: 'reddit', box: redditBox, data: ns.reddit, },
   { name: 'hackernews', box: hnBox, data: ns.hackerNews, },
-  { name: 'tech', box: techBox, data: ns.tech, },
-  { name: 'news', box: newsBox, data: ns.news, },
+  { name: 'thenextweb', box: techBox, data: ns.thenextweb, },
+  { name: 'verge', box: newsBox, data: ns.verge, },
 ]
 
 async function initialRender (): Promise<any> {
@@ -30,9 +27,6 @@ async function initialRender (): Promise<any> {
       renderBox(d, box.box, box.name);
     });
   }
-  crypto = await ns.crypto();
-  let line = contrib.line(crypto);
-  renderGraph(cryptoGraph);
 }
 
 function renderBox(items: NewsArticle[], box: blessed.Widgets.BoxElement, name: string) {
@@ -58,16 +52,6 @@ function renderBox(items: NewsArticle[], box: blessed.Widgets.BoxElement, name: 
   screen.render();
 }
 
-function renderGraph (line: any) {
-  screen.append(line);
-  line.style = {
-    left: '50%',
-    height: '50%',
-    top: '50%'
-  };
-  line.setData(crypto);
-  screen.render();
-}
 screen.key(['escape', 'q', 'C-c'], () => process.exit(0));
 screen.render();
 initialRender();

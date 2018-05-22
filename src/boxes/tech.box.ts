@@ -2,11 +2,11 @@ import * as blessed from 'blessed';
 
 export const techBox = blessed.box({
   name: 'tech',
-  top: '75%',
-  left: '0',
+  top: '50%',
+  left: '50%',
   width: '50%',
-  height: '25%',
-  label: 'Tech',
+  height: '50%',
+  label: 'The Next Web',
   border: {
     type: 'line'
   },

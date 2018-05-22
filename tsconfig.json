@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es6",
     "module": "commonjs",
-    "lib": ["es2015", "ESNEXT"],
+    "lib": ["es6"],
     "allowJs": true,
     "jsx": "preserve",
     "declaration": true,
@@ -11,5 +11,6 @@
     "noUnusedParameters": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true, 
+    "sourceMap": true
   }
 }
