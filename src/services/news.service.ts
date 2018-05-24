@@ -1,5 +1,6 @@
 declare var Promise;
 import fetch from 'node-fetch';
+import * as Parser from 'rss-parser';
 
 export interface NewsArticle {
   title: string;
@@ -14,12 +15,12 @@ export interface Crypto {
   y: string[];
 }
 
-async function getArticles (type: 'thenextweb' | 'verge'): Promise<NewsArticle[]> {
+async function getArticles(type: 'thenextweb' | 'verge'): Promise<NewsArticle[]> {
   const vergeAPI = `https://newsapi.org/v2/everything?sources=the-verge&sortBy=publishedAt&apiKey=ee582714b32645c8a48b8601e7267063`;
   const techAPI = `https://newsapi.org/v2/everything?sources=the-next-web&sortBy=publishedAt&apiKey=ee582714b32645c8a48b8601e7267063`
 
   let req = type === 'verge' ? await fetch(vergeAPI) : await fetch(techAPI);
-  let data = await(await req.json());
+  let data = await (await req.json());
   return data.articles.map(article => ({
     title: article.title,
     description: article.description,
@@ -29,13 +30,13 @@ async function getArticles (type: 'thenextweb' | 'verge'): Promise<NewsArticle[]
 }
 
 export class NewsService {
-  
 
-  async thenextweb (): Promise<NewsArticle[]> {
+
+  async thenextweb(): Promise<NewsArticle[]> {
     return getArticles('thenextweb');
   }
 
-  async verge (): Promise<NewsArticle[]> {
+  async verge(): Promise<NewsArticle[]> {
     return getArticles('verge');
   }
 
@@ -56,7 +57,7 @@ export class NewsService {
     }));
   }
 
-  async reddit (): Promise<NewsArticle[]> {
+  async reddit(): Promise<NewsArticle[]> {
     let redditAPI = `https://www.reddit.com/user/gagar1n/m/1_programming.json`;
     let res = await (await fetch(redditAPI)).json();
     return res.data.children.map(article => ({
@@ -65,5 +66,17 @@ export class NewsService {
       author: article.data.author,
       description: ``
     }));
+  }
+
+  async habr(): Promise<NewsArticle[]> {
+    const parser = new Parser();
+    const habrFeed = await parser.parseURL('https://habr.com/rss/best/');
+    return habrFeed.items.map(item => ({
+      title: item.title,
+      url: item.link,
+      author: item.creator,
+      description: ``
+    }));
+
   }
 }

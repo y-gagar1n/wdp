@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var blessed = require("blessed");
 var screen = blessed.screen({ smartCSR: true });
-screen.title = "Waddup!?";
 var opn = require("opn");
 var news_service_1 = require("./services/news.service");
 var _1 = require("./boxes/");
@@ -46,7 +45,7 @@ var boxes = [
     { name: 'reddit', box: _1.redditBox, data: ns.reddit },
     { name: 'hackernews', box: _1.hnBox, data: ns.hackerNews },
     { name: 'thenextweb', box: _1.techBox, data: ns.thenextweb },
-    { name: 'verge', box: _1.newsBox, data: ns.verge },
+    { name: 'habr', box: _1.habrBox, data: ns.habr },
 ];
 function initialRender() {
     return __awaiter(this, void 0, void 0, function () {

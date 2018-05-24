@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var node_fetch_1 = require("node-fetch");
+var Parser = require("rss-parser");
 function getArticles(type) {
     return __awaiter(this, void 0, void 0, function () {
         var vergeAPI, techAPI, req, _a, data;
@@ -139,6 +140,27 @@ var NewsService = (function () {
                                 title: "(" + article.data.score + " | " + article.data.num_comments + ") " + article.data.title,
                                 url: article.data.url,
                                 author: article.data.author,
+                                description: ""
+                            }); })];
+                }
+            });
+        });
+    };
+    NewsService.prototype.habr = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var parser, habrFeed;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        parser = new Parser();
+                        console.log(parser);
+                        return [4 /*yield*/, parser.parseURL('https://habr.com/rss/best/')];
+                    case 1:
+                        habrFeed = _a.sent();
+                        return [2 /*return*/, habrFeed.items.map(function (item) { return ({
+                                title: item.title,
+                                url: item.link,
+                                author: item.creator,
                                 description: ""
                             }); })];
                 }

@@ -1,6 +1,6 @@
 declare var Promise;
 import * as blessed from 'blessed';
-let screen = blessed.screen({smartCSR: true});
+let screen = blessed.screen({ smartCSR: true });
 import * as contrib from 'blessed-contrib';
 import * as opn from 'opn';
 import { NewsArticle, NewsService } from './services/news.service';
@@ -8,7 +8,8 @@ import {
   redditBox,
   hnBox,
   newsBox,
-  techBox
+  techBox,
+  habrBox
 } from './boxes/';
 
 
@@ -17,10 +18,10 @@ const boxes = [
   { name: 'reddit', box: redditBox, data: ns.reddit, },
   { name: 'hackernews', box: hnBox, data: ns.hackerNews, },
   { name: 'thenextweb', box: techBox, data: ns.thenextweb, },
-  { name: 'verge', box: newsBox, data: ns.verge, },
+  { name: 'habr', box: habrBox, data: ns.habr, },
 ]
 
-async function initialRender (): Promise<any> {
+async function initialRender(): Promise<any> {
   for (let box of boxes) {
     screen.append(box.box);
     box.data().then(d => {
@@ -34,7 +35,7 @@ function renderBox(items: NewsArticle[], box: blessed.Widgets.BoxElement, name: 
     items: items.map(article => article.title),
     mouse: true,
     style: {
-      selected: {bg: `#0f0`, fg: `#000`},
+      selected: { bg: `#0f0`, fg: `#000` },
     },
     name: name
   });
