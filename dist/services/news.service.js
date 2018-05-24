@@ -153,7 +153,6 @@ var NewsService = (function () {
                 switch (_a.label) {
                     case 0:
                         parser = new Parser();
-                        console.log(parser);
                         return [4 /*yield*/, parser.parseURL('https://habr.com/rss/best/')];
                     case 1:
                         habrFeed = _a.sent();
